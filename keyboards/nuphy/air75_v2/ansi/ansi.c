@@ -171,9 +171,10 @@ void long_press_key(void) {
             device_reset_show();
             device_reset_init();
 
+            // "Mac" switch position now selects the alt layout (layer 0); keep NKRO on.
             if (dev_info.sys_sw_state == SYS_SW_MAC) {
                 default_layer_set(1 << 0);
-                keymap_config.nkro = 0;
+                keymap_config.nkro = 1;
             } else {
                 default_layer_set(1 << 2);
                 keymap_config.nkro = 1;
@@ -301,12 +302,13 @@ void dial_sw_scan(void) {
         }
     }
 
+    // "Mac" switch position now selects the alt layout (layer 0); keep NKRO on.
     if (dial_scan & 0x02) {
         if (dev_info.sys_sw_state != SYS_SW_MAC) {
             f_sys_show = 1;
             default_layer_set(1 << 0);
             dev_info.sys_sw_state = SYS_SW_MAC;
-            keymap_config.nkro    = 0;
+            keymap_config.nkro    = 1;
             break_all_key();
         }
     } else {
@@ -371,12 +373,12 @@ void dial_sw_fast_scan(void) {
         }
     }
 
-    // Win or Mac
+    // Win or alt layout ("Mac" position); NKRO stays on in both
     if (dial_scan_sys) {
         if (dev_info.sys_sw_state != SYS_SW_MAC) {
             default_layer_set(1 << 0);
             dev_info.sys_sw_state = SYS_SW_MAC;
-            keymap_config.nkro    = 0;
+            keymap_config.nkro    = 1;
             break_all_key();
         }
     } else {
